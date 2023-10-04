@@ -1,13 +1,13 @@
-FROM alpine:3.9
+FROM alpine:latest
 
-ARG JMETER_VERSION="5.1.1"
+ARG JMETER_VERSION="5.6.2"
 ARG PLUGIN_VERSION="1.4.0"
 
 ENV JMETER_HOME /opt/apache-jmeter-${JMETER_VERSION}
 ENV JMETER_BIN  ${JMETER_HOME}/bin
 ENV JMETER_DOWNLOAD_URL  https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
 ENV PLUGIN_DOWNLOAD_URL  https://jmeter-plugins.org/downloads/file/JMeterPlugins-Standard-${PLUGIN_VERSION}.zip
-
+COPY container_start_slave.sh .
 # Install extra packages
 ARG TZ="Asia/Tokyo"
 RUN    apk update \
@@ -16,7 +16,7 @@ RUN    apk update \
     && update-ca-certificates \
     && apk add --update openjdk8-jre tzdata curl unzip bash \
     && apk add --no-cache nss \
-    && apk add python \
+    && apk add python3 \
     && rm -rf /var/cache/apk/* \
     && mkdir -p /tmp/dependencies  \
     && curl -L --silent ${JMETER_DOWNLOAD_URL} >  /tmp/dependencies/apache-jmeter-${JMETER_VERSION}.tgz  \
@@ -24,19 +24,22 @@ RUN    apk update \
     && mkdir -p /opt  \
     && tar -xzf /tmp/dependencies/apache-jmeter-${JMETER_VERSION}.tgz -C /opt  \
     && unzip -oq "/tmp/dependencies/JMeterPlugins-${PLUGIN_VERSION}.zip" -d $JMETER_HOME  \
-    && rm -rf /tmp/dependencies
+    && rm -rf /tmp/dependencies \
+	&& apk add dos2unix
 
 ENV PATH $PATH:$JMETER_BIN
 
-WORKDIR ${JMETER_HOME}
-
-ADD container_start_slave.sh /usr/local/bin
+COPY container_start_slave.sh /usr/local/bin/
+RUN dos2unix /usr/local/bin/container_start_slave.sh
 RUN chmod +x /usr/local/bin/container_start_slave.sh
+
+WORKDIR ${JMETER_HOME}
 
 #==============
 # Expose Ports
 #==============
 EXPOSE 1099 50000
 
-ENTRYPOINT []
-CMD ["container_start_slave.sh"]
+ENTRYPOINT ["/usr/local/bin/container_start_slave.sh"]
+
+
