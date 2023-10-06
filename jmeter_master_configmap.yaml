@@ -15,4 +15,5 @@ data:
     if [ -d /report/result ]; then
       rm -r /report/result
     fi
+    mkdir -p /report/result
     /opt/apache-jmeter-*/bin/jmeter -n -t /$1 -l /report/result.xml -e -o /report/result -Dserver.rmi.ssl.disable=true -R `getent ahostsv4 jmeter-slaves-svc | cut -d' ' -f1 | sort -u | awk -v ORS=, '{print $1}' | sed 's/,$//'` "${@:2:($#-1)}"
