@@ -34,7 +34,8 @@ eksctl create cluster --name <CLUSTER_NAME> \
 
 ### Create fargate profile
 
-Navigate to eks cluster by selecting the <CLUSTER-NAME> and add the new profile under compute. The new profile should consist of 2 namespaces including kube-system and <YOUR-NAMESPACE>.
+
+Navigate to eks cluster by selecting the ```<CLUSTER-NAME>``` and add the new profile under compute. The new profile should consist of 2 namespaces including kube-system and ```<YOUR-NAMESPACE>```.
 
 #### ※ cleaning up eks cluster
 ```
