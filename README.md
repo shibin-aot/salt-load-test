@@ -8,7 +8,7 @@ kubectl > v1.16.3
 eksctl > v0.11.10  
 
 
-### Build docker image
+### Build docker image (Not Required)
 ---
 The following script it is build jmeter master image and jmeter slave image.
 If you want to use without local, you must register image somewhere registry service.
@@ -17,7 +17,7 @@ If you want to use without local, you must register image somewhere registry ser
 ./command_docker_image_create.sh
 ```
 
-### Build EKS with eksctl command
+### Build EKS with eksctl command (Not Required)
 ---
 
 Install eksctrl with refer to the guide.
@@ -37,7 +37,7 @@ eksctl create cluster --name <CLUSTER_NAME> \
 
 Navigate to eks cluster by selecting the ```<CLUSTER-NAME>``` and add the new profile under compute. The new profile should consist of 2 namespaces including kube-system and ```<YOUR-NAMESPACE>```.
 
-#### ※ cleaning up eks cluster
+#### ※ cleaning up eks cluster (Not Required)
 ```
 eksctl delete cluster --name <CLUSTER_NAME>
 ```
@@ -100,7 +100,7 @@ You can delete resources created by command_jmeter_cluster_create.sh
 ### Run load test
 ---
 ```
-./container_start_test.sh -fsample.jmx
+./command_start_test.sh -fsample.jmx
 ```
 It need specify jmx file path with [-f] option.
 And If you need specify option for the test scenario.
@@ -117,7 +117,7 @@ e.g.
 ### Get the result
 ---
 ```
-./command_container_download_result.sh
+./command_download_test_result.sh
 ```
 It download result.jtl file to the report directory.
 
